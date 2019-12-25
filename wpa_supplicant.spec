@@ -1,7 +1,7 @@
 Name:          wpa_supplicant
 Epoch:         1
 Version:       2.6
-Release:       19
+Release:       21
 Summary:       A WPA Supplicant with support for WPA and WPA2 (IEEE 802.11i / RSN)
 License:       BSD
 Url:           https://w1.fi/wpa_supplicant/
@@ -87,9 +87,17 @@ Patch6059:     CVE-2019-9494-5.patch
 Patch6060:     CVE-2019-9494-6.patch
 Patch6061:     CVE-2019-9494-7.patch
 Patch6062:     CVE-2019-9494-8.patch
+Patch6063:     CVE-2019-16275.patch
+Patch6064:     CVE-2019-9497.patch
+Patch6065:     CVE-2019-9498-and-CVE-2019-9499.patch
+Patch6066:     CVE-2019-11555-1.patch
+Patch6067:     CVE-2019-11555-2.patch
 
 BuildRequires: qt-devel >= 4.0 openssl-devel readline-devel dbus-devel libnl3-devel systemd-units docbook-utils
-Requires:      systemd-sysv systemd
+Requires(post): systemd-sysv
+Requires(post): systemd
+Requires(preun): systemd
+Requires(postun): systemd
 Obsoletes:     libeap < %{epoch}:%{version}-%{release} libeap-devel < %{epoch}:%{version}-%{release}
 
 %description
@@ -179,6 +187,12 @@ install -m644 %{name}/doc/docbook/*.5 %{buildroot}%{_mandir}/man5
 %{_mandir}/man5/*
 
 %changelog
+* Sat Dec 21 2019 openEuler Buildteam <buildteam@openeuler.org> - 1:2.6-21
+- Modify requires
+
+* Mon Dec 16 2019 openEuler Buildteam <buildteam@openeuler.org> - 1:2.6-20
+- fix CVE-2019-16275, CVE-2019-9497, CVE-2019-9498, CVE-2019-9499, CVE-2019-11555
+
 * Wed Sep 25 2019 huzhiyu <huzhiyu1@huawei.com> - 1:2.6-19
 - change patch names legal
 
