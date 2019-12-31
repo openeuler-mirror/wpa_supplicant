@@ -1,7 +1,7 @@
 Name:          wpa_supplicant
 Epoch:         1
 Version:       2.6
-Release:       21
+Release:       22
 Summary:       A WPA Supplicant with support for WPA and WPA2 (IEEE 802.11i / RSN)
 License:       BSD
 Url:           https://w1.fi/wpa_supplicant/
@@ -16,7 +16,6 @@ Source5:       %{name}.logrotate
 #patches number ranging between [6000,9000) are backport from higher versions, including some CVE fixes
 Patch0000:     wpa_supplicant-assoc-timeout.patch
 Patch0001:     wpa_supplicant-flush-debug-output.patch
-Patch0002:     wpa_supplicant-dbus-service-file-args.patch
 Patch0003:     wpa_supplicant-quiet-scan-results-message.patch
 Patch0004:     wpa_supplicant-gui-qt4.patch
 Patch0005:     rh837402-less-aggressive-roaming.patch
@@ -92,6 +91,8 @@ Patch6064:     CVE-2019-9497.patch
 Patch6065:     CVE-2019-9498-and-CVE-2019-9499.patch
 Patch6066:     CVE-2019-11555-1.patch
 Patch6067:     CVE-2019-11555-2.patch
+
+Patch9000:     add-options-of-wpa_supplicant-service.patch
 
 BuildRequires: qt-devel >= 4.0 openssl-devel readline-devel dbus-devel libnl3-devel systemd-units docbook-utils
 Requires(post): systemd-sysv
@@ -187,6 +188,9 @@ install -m644 %{name}/doc/docbook/*.5 %{buildroot}%{_mandir}/man5
 %{_mandir}/man5/*
 
 %changelog
+* Tue Dec 31 2019 openEuler Buildteam <buildteam@openeuler.org> - 1:2.6-22
+- add options of wpa_supplicant.service
+
 * Sat Dec 21 2019 openEuler Buildteam <buildteam@openeuler.org> - 1:2.6-21
 - Modify requires
 
