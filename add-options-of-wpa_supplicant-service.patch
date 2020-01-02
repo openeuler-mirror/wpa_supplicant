@@ -1,0 +1,42 @@
+From edb7c242b5177f13ff4f57f61257838e80fb48ed Mon Sep 17 00:00:00 2001
+From: guoxiaoqi <guoxiaoqi2@huawei.com>
+Date: Tue, 31 Dec 2019 15:52:23 +0800
+Subject: [PATCH] add options of wpa_supplicant.service
+
+Signed-off-by: guoxiaoqi <guoxiaoqi2@huawei.com>
+---
+ wpa_supplicant/dbus/fi.epitest.hostap.WPASupplicant.service.in | 5 ++++-
+ wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in           | 5 ++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/wpa_supplicant/dbus/fi.epitest.hostap.WPASupplicant.service.in b/wpa_supplicant/dbus/fi.epitest.hostap.WPASupplicant.service.in
+index a75918f..19b4d79 100644
+--- a/wpa_supplicant/dbus/fi.epitest.hostap.WPASupplicant.service.in
++++ b/wpa_supplicant/dbus/fi.epitest.hostap.WPASupplicant.service.in
+@@ -1,5 +1,8 @@
+ [D-BUS Service]
+ Name=fi.epitest.hostap.WPASupplicant
+-Exec=@BINDIR@/wpa_supplicant -u
++Environment=DEBUG_LOGGER=/var/log/wpa_supplicant.log
++Environment=DEBUG_CONF=/etc/wpa_supplicant/wpa_supplicant.conf
++Environment=PID_FILE=/var/run/wpa_supplicant.pid
++Exec=@BINDIR@/wpa_supplicant -u -f ${DEBUG_LOGGER} -c ${DEBUG_CONF} -P ${PID_FILE}
+ User=root
+ SystemdService=wpa_supplicant.service
+diff --git a/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in b/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in
+index d97ff39..fd1e10b 100644
+--- a/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in
++++ b/wpa_supplicant/dbus/fi.w1.wpa_supplicant1.service.in
+@@ -1,5 +1,8 @@
+ [D-BUS Service]
+ Name=fi.w1.wpa_supplicant1
+-Exec=@BINDIR@/wpa_supplicant -u
++Environment=DEBUG_LOGGER=/var/log/wpa_supplicant.log
++Environment=DEBUG_CONF=/etc/wpa_supplicant/wpa_supplicant.conf
++Environment=PID_FILE=/var/run/wpa_supplicant.pid
++Exec=@BINDIR@/wpa_supplicant -u -f ${DEBUG_LOGGER} -c ${DEBUG_CONF} -P ${PID_FILE}
+ User=root
+ SystemdService=wpa_supplicant.service
+-- 
+1.8.3.1
+
