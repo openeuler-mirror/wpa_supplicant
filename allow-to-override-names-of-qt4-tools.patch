@@ -1,29 +1,27 @@
-From 9404f356e394604d1d3d6dbffc52abd54260e4d4 Mon Sep 17 00:00:00 2001
-From: Lubomir Rintel <lkundrak@v3.sk>
-Date: Tue, 27 Oct 2015 08:56:35 +0100
-Subject: [PATCH] wpa_supplicant: allow overriding the names of the Qt4 tools
+From 96e803dc2502f1d822258048bb8dd5febe733dc7 Mon Sep 17 00:00:00 2001
+From: openEuler Buildteam <buildteam@openeuler.org>
+Date: Fri, 10 Jan 2020 09:25:47 +0800
+Subject: [PATCH] allow to override names of the Qt4 tools.
 
-This is useful for distributions that ship different versions of Qt in
-different locations.
 ---
- wpa_supplicant/Makefile | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ wpa_supplicant/Makefile | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/wpa_supplicant/Makefile b/wpa_supplicant/Makefile
-index ad9ead9..b19676d 100644
+index 371789d..56c319c 100644
 --- a/wpa_supplicant/Makefile
 +++ b/wpa_supplicant/Makefile
-@@ -11,6 +11,9 @@ export INCDIR ?= /usr/local/include/
+@@ -21,7 +21,8 @@ export LIBDIR ?= /usr/local/lib/
+ export INCDIR ?= /usr/local/include/
  export BINDIR ?= /usr/local/sbin/
  PKG_CONFIG ?= pkg-config
- 
-+QMAKE ?= qmake
+-
 +LRELEASE ?= lrelease
-+
++QMAKE ?= qmake
  CFLAGS += $(EXTRA_CFLAGS)
  CFLAGS += -I$(abspath ../src)
  CFLAGS += -I$(abspath ../src/utils)
-@@ -1787,10 +1790,10 @@ wpa_gui:
+@@ -1811,10 +1812,10 @@ wpa_gui:
  	@echo "wpa_gui has been removed - see wpa_gui-qt4 for replacement"
  
  wpa_gui-qt4/Makefile:
@@ -37,5 +35,5 @@ index ad9ead9..b19676d 100644
  wpa_gui-qt4: wpa_gui-qt4/Makefile wpa_gui-qt4/lang/wpa_gui_de.qm
  	$(MAKE) -C wpa_gui-qt4
 -- 
-2.6.2
+1.8.3.1
 
