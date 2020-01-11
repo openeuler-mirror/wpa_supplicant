@@ -1,4 +1,5 @@
 /var/log/wpa_supplicant.log {
+    maxage 365
     missingok
     notifempty
     size 30k

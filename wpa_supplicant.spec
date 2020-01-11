@@ -1,6 +1,6 @@
 Name:          wpa_supplicant
 Epoch:         1
-Version:       2.6
+Version:       2.7
 Release:       22
 Summary:       A WPA Supplicant with support for WPA and WPA2 (IEEE 802.11i / RSN)
 License:       BSD
@@ -9,17 +9,10 @@ Source0:       http://w1.fi/releases/%{name}-%{version}.tar.gz
 Source1:       build-config
 Source2:       %{name}.conf
 Source3:       %{name}.service
-Source4:       %{name}.sysconfig
 Source5:       %{name}.logrotate
 
 #patches number ranging between [0,6000) are from fedora/redhat upstream
 #patches number ranging between [6000,9000) are backport from higher versions, including some CVE fixes
-Patch0000:     wpa_supplicant-assoc-timeout.patch
-Patch0001:     wpa_supplicant-flush-debug-output.patch
-Patch0003:     wpa_supplicant-quiet-scan-results-message.patch
-Patch0004:     wpa_supplicant-gui-qt4.patch
-Patch0005:     rh837402-less-aggressive-roaming.patch
-
 Patch6000:     macsec-0001-mka-Move-structs-transmit-receive-_-sa-sc-to-a-commo.patch
 Patch6001:     macsec-0002-mka-Pass-full-structures-down-to-macsec-drivers-pack.patch
 Patch6002:     macsec-0003-mka-Pass-full-structures-down-to-macsec-drivers-tran.patch
@@ -72,9 +65,6 @@ Patch6048:     rh1462262-use-system-openssl-ciphers.patch
 Patch6049:     rh1465138-openssl-Fix-openssl-1-1-private-key-callback.patch
 Patch6050:     rh1497640-mka-add-error-handling-for-secy_init_macsec.patch
 Patch6051:     rh1497640-pae-validate-input-before-pointer.patch
-
-Patch0006:     rh1567474-0001-D-Bus-Implement-Pmf-property.patch
-
 Patch6052:     rh1567474-0002-D-Bus-Add-pmf-to-global-capabilities.patch
 Patch6053:     rh1570903-nl80211-Fix-NL80211_ATTR_SMPS_MODE-encoding.patch
 Patch6054:     CVE-2019-9496-SAE-Fix-confirm-message-validation-in-error-cases.patch
@@ -93,6 +83,7 @@ Patch6066:     CVE-2019-11555-1.patch
 Patch6067:     CVE-2019-11555-2.patch
 
 Patch9000:     add-options-of-wpa_supplicant-service.patch
+Patch9001:     allow-to-override-names-of-qt4-tools.patch
 
 BuildRequires: qt-devel >= 4.0 openssl-devel readline-devel dbus-devel libnl3-devel systemd-units docbook-utils
 Requires(post): systemd-sysv
@@ -142,7 +133,6 @@ cp -f %{SOURCE1} %{name}/.config
 %install
 install -Dm600 %{SOURCE2} %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
 install -Dm644 %{SOURCE3} %{buildroot}%{_unitdir}/%{name}.service
-install -Dm644 %{SOURCE4} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 install -Dm644 %{SOURCE5} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 
 install -d %{buildroot}/%{_sbindir}
@@ -167,7 +157,6 @@ install -m644 %{name}/doc/docbook/*.5 %{buildroot}%{_mandir}/man5
 %files
 %license COPYING
 %config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf
-%config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %{_unitdir}/%{name}.service
 %{_sysconfdir}/dbus-1/system.d/%{name}.conf
@@ -188,6 +177,9 @@ install -m644 %{name}/doc/docbook/*.5 %{buildroot}%{_mandir}/man5
 %{_mandir}/man5/*
 
 %changelog
+* Fri Jan 10 2020 openEuler Buildteam <buildteam@openeuler.org> - 1:2.6-23
+- clean code
+
 * Tue Dec 31 2019 openEuler Buildteam <buildteam@openeuler.org> - 1:2.6-22
 - add options of wpa_supplicant.service
 
