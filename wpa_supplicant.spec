@@ -1,7 +1,7 @@
 Name:          wpa_supplicant
 Epoch:         1
-Version:       2.7
-Release:       22
+Version:       2.6
+Release:       23
 Summary:       A WPA Supplicant with support for WPA and WPA2 (IEEE 802.11i / RSN)
 License:       BSD
 Url:           https://w1.fi/wpa_supplicant/
