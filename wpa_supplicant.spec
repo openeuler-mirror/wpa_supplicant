@@ -1,7 +1,7 @@
 Name:          wpa_supplicant
 Epoch:         1
 Version:       2.6
-Release:       25
+Release:       26
 Summary:       A WPA Supplicant with support for WPA and WPA2 (IEEE 802.11i / RSN)
 License:       BSD
 Url:           https://w1.fi/wpa_supplicant/
@@ -83,6 +83,10 @@ Patch6066:     CVE-2019-11555-1.patch
 Patch6067:     CVE-2019-11555-2.patch
 Patch6068:     https://w1.fi/security/2018-1/rebased-v2.6-0001-WPA-Ignore-unauthenticated-encrypted-EAPOL-Key-data.patch
 Patch6069:     CVE-2019-9499.patch
+Patch6070:     CVE-2019-9495-pre1.patch
+Patch6071:     CVE-2019-9495-pre2.patch
+Patch6072:     CVE-2019-9495-pre3.patch
+Patch6073:     CVE-2019-9495.patch
 
 Patch9000:     add-options-of-wpa_supplicant-service.patch
 Patch9001:     allow-to-override-names-of-qt4-tools.patch
@@ -179,6 +183,12 @@ install -m644 %{name}/doc/docbook/*.5 %{buildroot}%{_mandir}/man5
 %{_mandir}/man5/*
 
 %changelog
+* Tue Feb 04 2020 zhouyihang <zhouyihang1@huawei.com> - 1:2.6-26
+- Type:cves
+- ID: CVE-2019-9495
+- SUG:restart
+- DESC: fix CVE-2019-9495
+
 * Mon Feb 03 2020 zhouyihang <zhouyihang1@huawei.com> - 1:2.6-25
 - Type:cves
 - ID: CVE-2019-9499
