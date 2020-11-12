@@ -1,4 +1,5 @@
-version_control: github
-src_repo: mafintosh/wpa_supplicant
-tag_prefix: ^v
-seperator: .
+git_url: https://w1.fi/hostap.git
+version_control: git
+src_repo: https://w1.fi/cgit/hostap/
+tag_prefix: "^hostap_"
+seperator: "_"
