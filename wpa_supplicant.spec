@@ -1,7 +1,7 @@
 Name:          wpa_supplicant
 Epoch:         1
 Version:       2.6
-Release:       26
+Release:       27
 Summary:       A WPA Supplicant with support for WPA and WPA2 (IEEE 802.11i / RSN)
 License:       BSD
 Url:           https://w1.fi/wpa_supplicant/
@@ -52,14 +52,14 @@ Patch6035:     macsec-0036-mka-Fix-the-order-of-operations-in-secure-channel-de.
 Patch6036:     macsec-0037-mka-Fix-use-after-free-when-receive-secure-channels-.patch
 Patch6037:     macsec-0038-mka-Fix-use-after-free-when-transmit-secure-channels.patch
 Patch6038:     macsec-0039-macsec_linux-Fix-NULL-pointer-dereference-on-error-c.patch
-Patch6039:     https://w1.fi/security/2017-1/rebased-v2.6-0001-hostapd-Avoid-key-reinstallation-in-FT-handshake.patch
-Patch6040:     https://w1.fi/security/2017-1/rebased-v2.6-0002-Prevent-reinstallation-of-an-already-in-use-group-ke.patch
-Patch6041:     https://w1.fi/security/2017-1/rebased-v2.6-0003-Extend-protection-of-GTK-IGTK-reinstallation-of-WNM-.patch
-Patch6042:     https://w1.fi/security/2017-1/rebased-v2.6-0004-Prevent-installation-of-an-all-zero-TK.patch
-Patch6043:     https://w1.fi/security/2017-1/rebased-v2.6-0005-Fix-PTK-rekeying-to-generate-a-new-ANonce.patch
-Patch6044:     https://w1.fi/security/2017-1/rebased-v2.6-0006-TDLS-Reject-TPK-TK-reconfiguration.patch
-Patch6045:     https://w1.fi/security/2017-1/rebased-v2.6-0007-WNM-Ignore-WNM-Sleep-Mode-Response-without-pending-r.patch
-Patch6046:     https://w1.fi/security/2017-1/rebased-v2.6-0008-FT-Do-not-allow-multiple-Reassociation-Response-fram.patch
+Patch6039:     rebased-v2.6-0001-hostapd-Avoid-key-reinstallation-in-FT-handshake.patch
+Patch6040:     rebased-v2.6-0002-Prevent-reinstallation-of-an-already-in-use-group-ke.patch
+Patch6041:     rebased-v2.6-0003-Extend-protection-of-GTK-IGTK-reinstallation-of-WNM-.patch
+Patch6042:     rebased-v2.6-0004-Prevent-installation-of-an-all-zero-TK.patch
+Patch6043:     rebased-v2.6-0005-Fix-PTK-rekeying-to-generate-a-new-ANonce.patch
+Patch6044:     rebased-v2.6-0006-TDLS-Reject-TPK-TK-reconfiguration.patch
+Patch6045:     rebased-v2.6-0007-WNM-Ignore-WNM-Sleep-Mode-Response-without-pending-r.patch
+Patch6046:     rebased-v2.6-0008-FT-Do-not-allow-multiple-Reassociation-Response-fram.patch
 Patch6047:     rh1451834-nl80211-Fix-race-condition-in-detecting-MAC-change.patch
 Patch6048:     rh1462262-use-system-openssl-ciphers.patch
 Patch6049:     rh1465138-openssl-Fix-openssl-1-1-private-key-callback.patch
@@ -81,12 +81,21 @@ Patch6064:     CVE-2019-9497.patch
 Patch6065:     CVE-2019-9498-and-CVE-2019-9499.patch
 Patch6066:     CVE-2019-11555-1.patch
 Patch6067:     CVE-2019-11555-2.patch
-Patch6068:     https://w1.fi/security/2018-1/rebased-v2.6-0001-WPA-Ignore-unauthenticated-encrypted-EAPOL-Key-data.patch
+Patch6068:     rebased-v2.6-0001-WPA-Ignore-unauthenticated-encrypted-EAPOL-Key-data.patch
 Patch6069:     CVE-2019-9499.patch
 Patch6070:     CVE-2019-9495-pre1.patch
 Patch6071:     CVE-2019-9495-pre2.patch
 Patch6072:     CVE-2019-9495-pre3.patch
 Patch6073:     CVE-2019-9495.patch
+Patch6074:     CVE-2019-13377-1.patch
+Patch6075:     CVE-2019-13377-2-pre1.patch
+Patch6076:     CVE-2019-13377-2-pre.patch
+Patch6077:     CVE-2019-13377-2.patch
+Patch6078:     CVE-2019-13377-3.patch
+Patch6079:     CVE-2019-13377-4.patch
+Patch60710:    CVE-2019-13377-5.patch
+Patch60711:    CVE-2019-13377-6-pre.patch
+Patch60712:    CVE-2019-13377-6.patch
 
 Patch9000:     add-options-of-wpa_supplicant-service.patch
 Patch9001:     allow-to-override-names-of-qt4-tools.patch
@@ -183,6 +192,12 @@ install -m644 %{name}/doc/docbook/*.5 %{buildroot}%{_mandir}/man5
 %{_mandir}/man5/*
 
 %changelog
+* Thu Dec 24 2020 wuchaochao <wuchaochao4@huawei.com> - 1:2.6-27
+- Type:cves
+- ID: CVE-2019-13377
+- SUG:NA
+- DESC: fix CVE-2019-13377
+
 * Tue Feb 04 2020 zhouyihang <zhouyihang1@huawei.com> - 1:2.6-26
 - Type:cves
 - ID: CVE-2019-9495
