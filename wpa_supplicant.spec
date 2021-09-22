@@ -1,7 +1,7 @@
 Name:          wpa_supplicant
 Epoch:         1
 Version:       2.6
-Release:       28
+Release:       29
 Summary:       A WPA Supplicant with support for WPA and WPA2 (IEEE 802.11i / RSN)
 License:       BSD or GPLv2
 Url:           https://w1.fi/wpa_supplicant/
@@ -99,6 +99,7 @@ Patch82:       CVE-2019-13377-6.patch
 Patch83:       add-options-of-wpa_supplicant-service.patch
 Patch84:       allow-to-override-names-of-qt4-tools.patch
 Patch85:       CVE-2021-27803.patch
+Patch86:       CVE-2021-0326.patch
 
 BuildRequires: qt-devel >= 4.0 openssl-devel readline-devel dbus-devel libnl3-devel systemd-units docbook-utils
 Requires(post): systemd-sysv
@@ -192,6 +193,12 @@ install -m644 %{name}/doc/docbook/*.5 %{buildroot}%{_mandir}/man5
 %{_mandir}/man5/*
 
 %changelog
+* Wed Sep 22 2021 gaoyusong <gaoyusong1@huawei.com> - 1:2.6-29
+- Type:cves
+- ID: CVE-2021-0326
+- SUG:NA
+- DESC: fix CVE-2021-0326
+
 * Thu Mar 11 2021 openEuler Buildteam <buildteam@openeuler.org> - 1:2.6-28
 - fix CVE-2021-27803
 
