@@ -1,0 +1,219 @@
+From 2b84ca4dd96459b661b0ebaf40ec43074fc9f42c Mon Sep 17 00:00:00 2001
+From: Jouni Malinen <jouni@codeaurora.org>
+Date: Thu, 25 Apr 2019 19:45:27 +0300
+Subject: Share common SAE and EAP-pwd functionality: suitable groups
+
+Start sharing common SAE and EAP-pwd functionality by adding a new
+source code file that can be included into both. This first step is
+bringing in a shared function to check whether a group is suitable.
+
+Signed-off-by: Jouni Malinen <jouni@codeaurora.org>
+---
+ src/common/dragonfly.c          | 27 +++++++++++++++++++++++++++
+ src/common/dragonfly.h          | 15 +++++++++++++++
+ src/common/sae.c                | 27 ++++++---------------------
+ src/eap_common/eap_pwd_common.c |  9 ++-------
+ wpa_supplicant/Android.mk       |  6 ++++++
+ wpa_supplicant/Makefile         |  6 ++++++
+ 6 files changed, 62 insertions(+), 28 deletions(-)
+ create mode 100644 src/common/dragonfly.c
+ create mode 100644 src/common/dragonfly.h
+
+diff --git a/src/common/dragonfly.c b/src/common/dragonfly.c
+new file mode 100644
+index 0000000..1e80404
+--- /dev/null
++++ b/src/common/dragonfly.c
+@@ -0,0 +1,27 @@
++/*
++ * Shared Dragonfly functionality
++ * Copyright (c) 2012-2016, Jouni Malinen <j@w1.fi>
++ * Copyright (c) 2019, The Linux Foundation
++ *
++ * This software may be distributed under the terms of the BSD license.
++ * See README for more details.
++ */
++
++#include "utils/includes.h"
++
++#include "utils/common.h"
++#include "dragonfly.h"
++
++
++int dragonfly_suitable_group(int group, int ecc_only)
++{
++	/* Enforce REVmd rules on which SAE groups are suitable for production
++	 * purposes: FFC groups whose prime is >= 3072 bits and ECC groups
++	 * defined over a prime field whose prime is >= 256 bits. Furthermore,
++	 * ECC groups defined over a characteristic 2 finite field and ECC
++	 * groups with a co-factor greater than 1 are not suitable. */
++	return group == 19 || group == 20 || group == 21 ||
++		group == 28 || group == 29 || group == 30 ||
++		(!ecc_only &&
++		 (group == 15 || group == 16 || group == 17 || group == 18));
++}
+diff --git a/src/common/dragonfly.h b/src/common/dragonfly.h
+new file mode 100644
+index 0000000..9f3c428
+--- /dev/null
++++ b/src/common/dragonfly.h
+@@ -0,0 +1,15 @@
++/*
++ * Shared Dragonfly functionality
++ * Copyright (c) 2012-2016, Jouni Malinen <j@w1.fi>
++ * Copyright (c) 2019, The Linux Foundation
++ *
++ * This software may be distributed under the terms of the BSD license.
++ * See README for more details.
++ */
++
++#ifndef DRAGONFLY_H
++#define DRAGONFLY_H
++
++int dragonfly_suitable_group(int group, int ecc_only);
++
++#endif /* DRAGONFLY_H */
+diff --git a/src/common/sae.c b/src/common/sae.c
+index 5ef6c4c..b35821d 100644
+--- a/src/common/sae.c
++++ b/src/common/sae.c
+@@ -15,36 +15,21 @@
+ #include "crypto/random.h"
+ #include "crypto/dh_groups.h"
+ #include "ieee802_11_defs.h"
++#include "dragonfly.h"
+ #include "sae.h"
+ 
+-static int sae_suitable_group(int group)
+-{
+-#ifdef CONFIG_TESTING_OPTIONS
+-	/* Allow all groups for testing purposes in non-production builds. */
+-	return 1;
+-#else /* CONFIG_TESTING_OPTIONS */
+-	/* Enforce REVmd rules on which SAE groups are suitable for production
+-	 * purposes: FFC groups whose prime is >= 3072 bits and ECC groups
+-	 * defined over a prime field whose prime is >= 256 bits. Furthermore,
+-	 * ECC groups defined over a characteristic 2 finite field and ECC
+-	 * groups with a co-factor greater than 1 are not suitable. Disable
+-	 * groups that use Brainpool curves as well for now since they leak more
+-	 * timing information due to the prime not being close to a power of
+-	 * two. */
+-
+-	return group == 19 || group == 20 || group == 21 ||
+-		group == 15 || group == 16 || group == 17 || group == 18;
+-#endif /* CONFIG_TESTING_OPTIONS */
+-}
+-
+ int sae_set_group(struct sae_data *sae, int group)
+ {
+ 	struct sae_temporary_data *tmp;
+ 
+-	if (!sae_suitable_group(group)) {
++#ifdef CONFIG_TESTING_OPTIONS
++       /* Allow all groups for testing purposes in non-production builds. */
++#else /* CONFIG_TESTING_OPTIONS */
++       if (!dragonfly_suitable_group(group, 0)) {
+ 		wpa_printf(MSG_DEBUG, "SAE: Reject unsuitable group %d", group);
+ 		return -1;
+ 	}
++#endif /* CONFIG_TESTING_OPTIONS */
+ 
+ 	sae_clear_data(sae);
+ 	tmp = sae->tmp = os_zalloc(sizeof(*tmp));
+diff --git a/src/eap_common/eap_pwd_common.c b/src/eap_common/eap_pwd_common.c
+index bac2796..755aafb 100644
+--- a/src/eap_common/eap_pwd_common.c
++++ b/src/eap_common/eap_pwd_common.c
+@@ -9,6 +9,7 @@
+ #include "includes.h"
+ #include "common.h"
+ #include "utils/const_time.h"
++#include "common/dragonfly.h"
+ #include "crypto/sha256.h"
+ #include "crypto/crypto.h"
+ #include "eap_defs.h"
+@@ -84,18 +85,12 @@ static int eap_pwd_kdf(const u8 *key, size_t keylen, const u8 *label,
+ 	return 0;
+ }
+ 
+-static int eap_pwd_suitable_group(u16 num)
+-{
+-	/* Do not allow ECC groups with prime under 256 bits based on guidance
+-	* for the similar design in SAE. */
+-	return num == 19 || num == 20 || num == 21;
+-}
+ EAP_PWD_group * get_eap_pwd_group(u16 num)
+ {
+         EAP_PWD_group *grp;
+ 
+         grp = os_zalloc(sizeof(EAP_PWD_group));
+-        if (!eap_pwd_suitable_group(num)) {
++        if (!dragonfly_suitable_group(num, 1)) {
+                 wpa_printf(MSG_INFO, "EAP-pwd: unsuitable group %u", num);
+                 return NULL;
+        }
+diff --git a/wpa_supplicant/Android.mk b/wpa_supplicant/Android.mk
+index 924ac07..aa5ac8c 100644
+--- a/wpa_supplicant/Android.mk
++++ b/wpa_supplicant/Android.mk
+@@ -236,6 +236,7 @@ L_CFLAGS += -DCONFIG_SAE
+ OBJS += src/common/sae.c
+ NEED_ECC=y
+ NEED_DH_GROUPS=y
++NEED_DRAGONFLY=y
+ endif
+ 
+ ifdef CONFIG_WNM
+@@ -641,6 +642,7 @@ OBJS += src/eap_peer/eap_pwd.c src/eap_common/eap_pwd_common.c
+ CONFIG_IEEE8021X_EAPOL=y
+ NEED_SHA256=y
+ NEED_ECC=y
++NEED_DRAGONFLY=y
+ endif
+ 
+ ifdef CONFIG_EAP_EKE
+@@ -918,6 +920,10 @@ ifdef CONFIG_SMARTCARD
+ L_CFLAGS += -DCONFIG_SMARTCARD
+ endif
+ 
++ifdef NEED_DRAGONFLY
++OBJS += src/common/dragonfly.c
++endif
++
+ ifdef MS_FUNCS
+ OBJS += src/crypto/ms_funcs.c
+ NEED_DES=y
+diff --git a/wpa_supplicant/Makefile b/wpa_supplicant/Makefile
+index d70189b..8fce344 100644
+--- a/wpa_supplicant/Makefile
++++ b/wpa_supplicant/Makefile
+@@ -270,6 +270,7 @@ CFLAGS += -DCONFIG_SAE
+ OBJS += ../src/common/sae.o
+ NEED_ECC=y
+ NEED_DH_GROUPS=y
++NEED_DRAGONFLY=y
+ endif
+ 
+ ifdef CONFIG_WNM
+@@ -673,6 +674,7 @@ OBJS += ../src/eap_peer/eap_pwd.o ../src/eap_common/eap_pwd_common.o
+ CONFIG_IEEE8021X_EAPOL=y
+ NEED_SHA256=y
+ NEED_ECC=y
++NEED_DRAGONFLY=y
+ endif
+ 
+ ifdef CONFIG_EAP_EKE
+@@ -967,6 +969,10 @@ ifdef CONFIG_SMARTCARD
+ CFLAGS += -DCONFIG_SMARTCARD
+ endif
+ 
++ifdef NEED_DRAGONFLY
++OBJS += ../src/common/dragonfly.o
++endif
++
+ ifdef MS_FUNCS
+ OBJS += ../src/crypto/ms_funcs.o
+ NEED_DES=y
+-- 
+1.8.3.1
+
