@@ -1,7 +1,7 @@
 Name:          wpa_supplicant
 Epoch:         1
 Version:       2.6
-Release:       29
+Release:       30
 Summary:       A WPA Supplicant with support for WPA and WPA2 (IEEE 802.11i / RSN)
 License:       BSD or GPLv2
 Url:           https://w1.fi/wpa_supplicant/
@@ -100,6 +100,12 @@ Patch83:       add-options-of-wpa_supplicant-service.patch
 Patch84:       allow-to-override-names-of-qt4-tools.patch
 Patch85:       CVE-2021-27803.patch
 Patch86:       CVE-2021-0326.patch
+Patch87:       backport-Add-support-for-wolfSSL-cryptographic-library.patch
+Patch88:       backport-Share-common-SAE-and-EAP-pwd-functionality-suitable-.patch
+Patch89:       backport-0001-CVE-2022-23303-CVE-2022-23304.patch
+Patch90:       backport-0002-CVE-2022-23303-CVE-2022-23304.patch
+Patch91:       backport-0003-CVE-2022-23303-CVE-2022-23304.patch
+Patch92:       backport-0004-CVE-2022-23303-CVE-2022-23304.patch
 
 BuildRequires: qt-devel >= 4.0 openssl-devel readline-devel dbus-devel libnl3-devel systemd-units docbook-utils
 Requires(post): systemd-sysv
@@ -193,6 +199,12 @@ install -m644 %{name}/doc/docbook/*.5 %{buildroot}%{_mandir}/man5
 %{_mandir}/man5/*
 
 %changelog
+* Wed Jan 26 2022 shixuantong <shixuantong@huawei.com> - 1:2.6-30
+- Type:cves
+- ID:CVE-2022-23303 CVE-2022-23304
+- SUG:NA
+- DESC:fix CVE-2022-23303 CVE-2022-23304
+
 * Wed Sep 22 2021 gaoyusong <gaoyusong1@huawei.com> - 1:2.6-29
 - Type:cves
 - ID: CVE-2021-0326
