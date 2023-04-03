@@ -1,7 +1,7 @@
 Name:          wpa_supplicant
 Epoch:         1
 Version:       2.10
-Release:       1
+Release:       2
 Summary:       A WPA Supplicant with support for WPA and WPA2 (IEEE 802.11i / RSN)
 License:       BSD or GPLv2
 Url:           https://w1.fi/wpa_supplicant/
@@ -103,6 +103,9 @@ install -m644 %{name}/doc/docbook/*.5 %{buildroot}%{_mandir}/man5
 %{_mandir}/man5/*
 
 %changelog
+* Mon Apr 03 2022 jchzhou <zhoujiacheng@iscas.ac.cn> - 1:2.10-2
+- fix weak default cipher config related issue
+
 * Thu Mar 31 2022 yuanxin <yuanxin24@h-partners.com> - 1:2.10-1
 - update version to 2.10
 
