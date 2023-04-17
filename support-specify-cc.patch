@@ -1,0 +1,12 @@
+diff -up wpa_supplicant-2.10/wpa_supplicant/Makefile.orig2 wpa_supplicant-2.10/wpa_supplicant/Makefile
+--- wpa_supplicant-2.10/wpa_supplicant/Makefile.orig2	2023-04-17 18:16:31.762463758 +0800
++++ wpa_supplicant-2.10/wpa_supplicant/Makefile	2023-04-17 18:19:27.419285936 +0800
+@@ -2051,7 +2051,7 @@ wpa_gui-qt4/lang/wpa_gui_de.qm: wpa_gui-
+ 	$(LRELEASE) wpa_gui-qt4/wpa_gui.pro
+ 
+ wpa_gui-qt4: wpa_gui-qt4/Makefile wpa_gui-qt4/lang/wpa_gui_de.qm
+-	$(MAKE) -C wpa_gui-qt4
++	$(MAKE) -C wpa_gui-qt4 CC=$$CC CXX=$$CXX
+ 
+ FIPSDIR=/usr/local/ssl/fips-2.0
+ FIPSLD=$(FIPSDIR)/bin/fipsld

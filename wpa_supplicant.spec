@@ -1,7 +1,7 @@
 Name:          wpa_supplicant
 Epoch:         1
 Version:       2.10
-Release:       1
+Release:       2
 Summary:       A WPA Supplicant with support for WPA and WPA2 (IEEE 802.11i / RSN)
 License:       BSD or GPLv2
 Url:           https://w1.fi/wpa_supplicant/
@@ -12,6 +12,7 @@ Source3:       %{name}.service
 Source5:       %{name}.logrotate
 
 Patch6000:     wpa_supplicant-gui-qt4.patch
+Patch6001:     support-specify-cc.patch
 
 BuildRequires: qt-devel >= 4.0 openssl-devel readline-devel dbus-devel libnl3-devel systemd-units docbook-utils
 Requires(post): systemd-sysv
@@ -103,6 +104,9 @@ install -m644 %{name}/doc/docbook/*.5 %{buildroot}%{_mandir}/man5
 %{_mandir}/man5/*
 
 %changelog
+* Mon Apr 17 2023 jammyjellyfish <jammyjellyfish255@outlook.com> - 1:2.10-2
+- Support specify CC
+
 * Thu Mar 31 2022 yuanxin <yuanxin24@h-partners.com> - 1:2.10-1
 - update version to 2.10
 
